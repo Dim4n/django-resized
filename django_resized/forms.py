@@ -1,3 +1,4 @@
+# coding: utf-8
 import os
 import sys
 from io import BytesIO
@@ -15,12 +16,22 @@ DEFAULT_SIZE = getattr(settings, 'DJANGORESIZED_DEFAULT_SIZE', [1920, 1080])
 DEFAULT_QUALITY = getattr(settings, 'DJANGORESIZED_DEFAULT_QUALITY', 0)
 DEFAULT_KEEP_META = getattr(settings, 'DJANGORESIZED_DEFAULT_KEEP_META', True)
 
+alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
+            'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i',
+            'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+            'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+            'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch',
+            'ш': 'sh', 'щ': 'shch', 'ы': 'i', 'э': 'e', 'ю': 'yu',
+            'я': 'ya'}
+
 
 class ResizedImageFieldFile(ImageField.attr_class):
 
     def save(self, name, content, save=True):
         content.file.seek(0)
         img = Image.open(content.file)
+        
+        name = ''.join(alphabet.get(w.encode('utf-8'), w) for w in name.lower())
 
         if not self.field.keep_meta:
             image_without_exif = Image.new(img.mode, img.size)
