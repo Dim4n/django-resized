@@ -5,6 +5,7 @@ Features
 
 - Support for Django 1.3, 1.4, 1.5, 1.6 and 1.7
 - Python 3 support
+- Transliteration cyrrilic
 
 Installation
 ============
